@@ -1,0 +1,13 @@
+a {
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.layer h2 {
+    margin-bottom: 20px;
+}
