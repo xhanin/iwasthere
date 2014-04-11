@@ -167,7 +167,7 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     'bower-install': {
       app: {
-        html: '<%= layout.app %>/index.html',
+        html: '<%= layout.app %>/app.html',
         ignorePath: '<%= layout.app %>/'
       }
     },
@@ -222,7 +222,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= layout.app %>/index.html',
+      html: '<%= layout.app %>/app.html',
       options: {
         dest: '<%= layout.dist %>'
       }
@@ -342,7 +342,7 @@ module.exports = function (grunt) {
       ]
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
+    // By default, your `app.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
     // cssmin: {
