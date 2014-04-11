@@ -1,0 +1,41 @@
+
+<h1>Events</h1>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-info" ng-hide="showAddEvent" ng-click="showAddEvent = true">Add Event</button>
+                <div ng-show="showAddEvent">
+                    <form role="form" ng-submit="addEvent()">
+                        <div class="form-group">
+                            <label for="inputEventName" class="col-sm-2 control-label">Name</label>
+
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputEventName" placeholder="Event name"
+                                       ng-model="event.name"
+                                       ng-required="true">
+                            </div>
+                        </div>
+
+                        <p>&nbsp;</p>
+
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <button class="btn btn-default"  ng-click="showAddEvent = false">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Add</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="event in events">
+                <span class="badge">{{event.count}}</span>
+                <a href="#/events/{{event.id}}">{{event.name}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

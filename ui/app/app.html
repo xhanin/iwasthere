@@ -12,6 +12,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/Bootflat/css/bootstrap.min.css" />
     <link rel="stylesheet" href="bower_components/Bootflat/bootflat/css/bootflat.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -24,6 +25,34 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <div class="header">
+        <nav class="navbar navbar-default" role="navigation" ng-controller="HeaderCtrl">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">I Was There!</a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{ active: isActive('/events')}"><a ng-href="#/events">Events</a></li>
+                        <li ng-controller="UserCtrl" ng-show="user.connected" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button ng-controller="UserCtrl" ng-hide="user.connected" type="button" class="btn btn-warning navbar-btn  navbar-right" ng-click="login()">Sign in</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
 
@@ -32,6 +61,12 @@
             <div class="footer">
                 <div class="container">
                     <div class="clearfix">
+                        <dl class="footer-nav">
+                            <dt class="nav-title">I was there</dt>
+                            <dd class="nav-item"><a href="http://iwasthere.restx.io/">Home</a></dd>
+                            <dd class="nav-item"><a href="http://github.com/xhanin/iwasthere">Github</a></dd>
+                            <dd class="nav-item"><a href="#/events">Events</a></dd>
+                        </dl>
                         <dl class="footer-nav">
                             <dt class="nav-title">RESTX</dt>
                             <dd class="nav-item"><a href="http://restx.io/">restx.io</a></dd>
@@ -85,7 +120,12 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/events.js"></script>
+        <script src="scripts/controllers/event.js"></script>
+        <script src="scripts/controllers/header.js"></script>
+        <script src="scripts/controllers/user.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/signup.js"></script>
         <!-- endbuild -->
 </body>
 </html>
