@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iwasthereApp')
-  .controller('EventCtrl', function ($scope) {
+  .controller('EventCtrl', function ($scope, Event) {
         // TODO use resource
 
     $scope.event =
