@@ -1,14 +1,23 @@
 package iwasthere.domain;
 
 import org.joda.time.DateTime;
+import org.jongo.marshall.jackson.oid.Id;
+import org.jongo.marshall.jackson.oid.ObjectId;
 
 /**
  * Date: 12/4/14
  * Time: 13:21
  */
 public class Event {
+
+    @Id @ObjectId
+    private String key;
     private String name;
     private DateTime date;
+
+    public String getKey() {
+        return key;
+    }
 
     public String getName() {
         return name;
@@ -16,6 +25,11 @@ public class Event {
 
     public DateTime getDate() {
         return date;
+    }
+
+    public Event setKey(final String key) {
+        this.key = key;
+        return this;
     }
 
     public Event setName(final String name) {
@@ -31,8 +45,10 @@ public class Event {
     @Override
     public String toString() {
         return "Event{" +
-                "name='" + name + '\'' +
+                "key='" + key + '\'' +
+                ", name='" + name + '\'' +
                 ", date=" + date +
                 '}';
     }
+
 }

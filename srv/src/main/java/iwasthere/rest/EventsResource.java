@@ -1,12 +1,13 @@
 package iwasthere.rest;
 
 import iwasthere.domain.Event;
-import org.joda.time.DateTime;
 import restx.annotations.GET;
+import restx.annotations.POST;
 import restx.annotations.RestxResource;
 import restx.factory.Component;
+import restx.jongo.JongoCollection;
 
-import static java.util.Arrays.asList;
+import javax.inject.Named;
 
 /**
  * Date: 12/4/14
@@ -16,11 +17,20 @@ import static java.util.Arrays.asList;
 @RestxResource
 public class EventsResource {
 
+    private final JongoCollection events;
+
+    public EventsResource(@Named("events") JongoCollection events) {
+        this.events = events;
+    }
+
     @GET("/events")
     public Iterable<Event> findEvents() {
-        return asList(
-                new Event().setName("RESTX @ DevoxxFR 2014").setDate(DateTime.parse("2014-04-18T18:00:00+02:00")),
-                new Event().setName("Meet and Greet @ DevoxxFR 2014").setDate(DateTime.parse("2014-04-18T19:30:00+02:00"))
-        );
+        return events.get().find().as(Event.class);
+    }
+
+    @POST("/events")
+    public Event addEvent(Event event) {
+        events.get().save(event);
+        return event;
     }
 }
