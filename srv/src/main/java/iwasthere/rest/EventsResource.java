@@ -8,6 +8,7 @@ import restx.annotations.POST;
 import restx.annotations.RestxResource;
 import restx.factory.Component;
 import restx.jongo.JongoCollection;
+import restx.security.PermitAll;
 
 import javax.inject.Named;
 
@@ -25,16 +26,19 @@ public class EventsResource {
         this.events = events;
     }
 
+    @PermitAll
     @GET("/events")
     public Iterable<Event> findEvents() {
         return events.get().find().as(Event.class);
     }
 
+    @PermitAll
     @GET("/events/:key")
     public Optional<Event> findEvent(String key) {
         return Optional.fromNullable(events.get().findOne(new ObjectId(key)).as(Event.class));
     }
 
+    @PermitAll
     @POST("/events")
     public Event addEvent(Event event) {
         events.get().save(event);

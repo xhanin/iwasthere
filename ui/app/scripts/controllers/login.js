@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('iwasthereApp')
-  .controller('LoginCtrl', function ($scope, $rootScope) {
+  .controller('LoginCtrl', function ($scope, $rootScope, $http, $location, md5) {
         $scope.login = { };
 
         $scope.submit = function() {
-            // TODO use resource
-            $rootScope.user = {
-                connected: true,
-                name: $scope.login.email
-            }
+            $http.post('/api/sessions', {principal: {name: $scope.login.email, passwordHash: md5.createHash($scope.login.password)}})
+                .success(function(data, status, headers, config) {
+                    console.log('authenticated', data, status);
+                    $rootScope.$broadcast('AUTHENTICATED', data.principal);
+                    $location.path('/events');
+                }).error(function(data, status, headers, config) {
+                    console.log('error', data, status);
+                    alert("Authentication error, please try again.");
+                });
         }
   });

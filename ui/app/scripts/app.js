@@ -4,7 +4,8 @@ angular.module('iwasthereApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'angular-md5'
 ])
   .config(function ($routeProvider) {
     $routeProvider

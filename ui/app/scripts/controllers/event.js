@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('iwasthereApp')
-  .controller('EventCtrl', function ($scope, $routeParams, Event) {
+  .controller('EventCtrl', function ($scope, $routeParams, Event, Session) {
         // TODO use resource
+    $scope.user = Session.user;
 
     $scope.event =
         Event.get( { key: $routeParams.key } );
