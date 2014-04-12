@@ -8,7 +8,7 @@
             </div>
 
             <div class="col-sm-6"  ng-hide="!user.connected || event.iwasthere">
-                <button type="button" class="btn btn-primary btn-block">I was there!</button>
+                <button ng-click="addSelfAsAttendee()" type="button" class="btn btn-primary btn-block">I was there!</button>
             </div>
 
             <div class="col-sm-6" ng-show="event.iwasthere">
@@ -56,7 +56,7 @@
         <div class="thumbnail">
             <img class="img-rounded" ng-src="{{attendee.img}}">
             <div class="caption text-center">
-                <h3>{{attendee.name}}</h3>
+                <h3>{{attendee.fullName}}</h3>
                 <p ng-repeat="message in attendee.messages" class="mood mood-{{message.mood}}">{{message.message}}</p>
             </div>
         </div>
