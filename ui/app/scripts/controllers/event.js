@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('iwasthereApp')
-  .controller('EventCtrl', function ($scope, Event) {
+  .controller('EventCtrl', function ($scope, $routeParams, Event) {
         // TODO use resource
 
     $scope.event =
-        {id: '123', name: 'RESTX @ DevoxxFr 2014', count: 150, iwasthere: true };
+        Event.get( { key: $routeParams.key } );
 
     $scope.attendees = [
         {name: 'Xavier', img: 'http://www.gravatar.com/avatar/823cc38b227e3b03babd0b3e4642f8f1.jpg?s=350' },

@@ -12,7 +12,7 @@ angular.module('iwasthereApp', [
         templateUrl: 'views/events.html',
         controller: 'EventsCtrl'
       })
-      .when('/events/:eventId', {
+      .when('/events/:key', {
         templateUrl: 'views/event.html',
         controller: 'EventCtrl'
       })

@@ -1,6 +1,8 @@
 package iwasthere.rest;
 
+import com.google.common.base.Optional;
 import iwasthere.domain.Event;
+import org.bson.types.ObjectId;
 import restx.annotations.GET;
 import restx.annotations.POST;
 import restx.annotations.RestxResource;
@@ -26,6 +28,11 @@ public class EventsResource {
     @GET("/events")
     public Iterable<Event> findEvents() {
         return events.get().find().as(Event.class);
+    }
+
+    @GET("/events/:key")
+    public Optional<Event> findEvent(String key) {
+        return Optional.fromNullable(events.get().findOne(new ObjectId(key)).as(Event.class));
     }
 
     @POST("/events")
