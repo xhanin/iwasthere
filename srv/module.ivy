@@ -21,6 +21,7 @@
         <dependency org="io.restx" name="restx-factory" rev="0.32" conf="default" />
         <dependency org="io.restx" name="restx-factory-admin" rev="0.32" conf="default" />
         <dependency org="io.restx" name="restx-monitor-admin" rev="0.32" conf="default" />
+        <dependency org="io.restx" name="restx-barbarywatch" rev="0.32" conf="default" />
         <dependency org="io.restx" name="restx-server-jetty" rev="0.32" conf="default" />
         <dependency org="io.restx" name="restx-apidocs" rev="0.32" conf="default" />
         <dependency org="io.restx" name="restx-specs-admin" rev="0.32" conf="default" />
