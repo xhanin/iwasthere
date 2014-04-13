@@ -28,4 +28,13 @@ angular.module('iwasthereApp', [
       .otherwise({
         redirectTo: '/events'
       });
-  });
+  })
+    .constant('$baseUrl', (function() {
+        // production, static files on github served on 'iwasthere.restx.io', api on heroku served from 'http://iwasthere-restx-io.herokuapp.com'
+        if (location.host === 'iwasthere.restx.io') return 'http://iwasthere-restx-io.herokuapp.com';
+        // dev with CORS, static files are served on localhost port 8077
+        if (location.host === 'localhost:8077') return 'http://localhost:8080';
+        // other cases, assume server serves api too
+        return '';
+    })())
+;

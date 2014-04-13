@@ -1,18 +1,24 @@
 package iwasthere;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
+import restx.RestxFilter;
+import restx.RestxHandlerMatch;
+import restx.StdRestxRequestMatch;
 import restx.config.ConfigLoader;
 import restx.config.ConfigSupplier;
-import restx.factory.Provides;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableSet;
-import restx.security.*;
 import restx.factory.Module;
 import restx.factory.Provides;
-import javax.inject.Named;
+import restx.http.HttpStatus;
+import restx.security.BCryptCredentialsStrategy;
+import restx.security.BasicPrincipalAuthenticator;
+import restx.security.CredentialsStrategy;
+import restx.security.SecuritySettings;
+import restx.security.SignatureKey;
+import restx.security.StdBasicPrincipalAuthenticator;
+import restx.security.StdUserService;
 
-import java.nio.file.Paths;
+import javax.inject.Named;
 
 @Module
 public class AppModule {
@@ -42,6 +48,36 @@ public class AppModule {
     @Provides
     public CredentialsStrategy credentialsStrategy() {
         return new BCryptCredentialsStrategy();
+    }
+
+    @Provides @Named("restx.activation::restx.security.CORSFilter::CORSFilter")
+    public String disableCorsFilter() {
+        return "false";
+    }
+
+    @Provides
+    public RestxFilter getCorsAuthorizerFilter() {
+        return (r) ->
+            RestxHandlerMatch.of(Optional.of(new StdRestxRequestMatch(r.getRestxPath())),
+                    (match, req, resp, ctx) -> {
+                        Optional<String> origin = req.getHeader("Origin");
+                        if (origin.isPresent()) {
+                            resp.setHeader("Access-Control-Allow-Origin", origin.get());
+                            resp.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                            resp.setHeader("Access-Control-Allow-Credentials", Boolean.TRUE.toString());
+                            resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+
+                            if ("OPTIONS".equals(req.getHttpMethod())) {
+                                resp.setStatus(HttpStatus.OK);
+                            } else {
+                                ctx.nextHandlerMatch().handle(req, resp, ctx);
+                            }
+                        } else {
+                            ctx.nextHandlerMatch().handle(req, resp, ctx);
+                        }
+                    }
+            )
+        ;
     }
 
     @Provides

@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('iwasthereApp')
-    .factory('Session', function ($resource) {
-        var s = $resource('/api/sessions/:sessionKey', {sessionKey: 'current'});
+    .factory('Session', function ($resource, $baseUrl) {
+        var s = $resource($baseUrl + '/api/sessions/:sessionKey', {sessionKey: 'current'},
+            {
+                'get':    {method:'GET', withCredentials: true},
+                'save':    {method:'POST', withCredentials: true},
+                'delete':    {method:'DELETE', withCredentials: true}
+            });
         s.user = { connected: false };
         return  s;
     })
