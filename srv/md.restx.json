@@ -9,7 +9,7 @@
     },
     "fragments": {
         "maven": [
-            "classpath:///restx/build/fragments/maven/custom-war-resources.xml"
+            "classpath:///restx/build/fragments/maven/copy-dependencies.xml"
         ]
     },
     "dependencies": {
