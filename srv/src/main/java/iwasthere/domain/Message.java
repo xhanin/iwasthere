@@ -1,21 +1,45 @@
 package iwasthere.domain;
 
-public class Message {
-    private String message;
+import org.joda.time.DateTime;
 
-    public String getMessage() {
-        return message;
+public class Message {
+    private DateTime timestamp;
+    private String text;
+    private String mood;
+
+    public DateTime getTimestamp() {
+        return timestamp;
     }
 
-    public Message setMessage(final String message) {
-        this.message = message;
+    public String getText() {
+        return text;
+    }
+
+    public String getMood() {
+        return mood;
+    }
+
+    public Message setTimestamp(final DateTime timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    public Message setText(final String text) {
+        this.text = text;
+        return this;
+    }
+
+    public Message setMood(final String mood) {
+        this.mood = mood;
         return this;
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "message='" + message + '\'' +
+                "timestamp=" + timestamp +
+                ", text='" + text + '\'' +
+                ", mood='" + mood + '\'' +
                 '}';
     }
 }

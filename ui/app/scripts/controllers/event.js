@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('iwasthereApp')
-  .controller('EventCtrl', function ($scope, $routeParams, Event, Session, Attendee, md5) {
-        // TODO use resource
+  .controller('EventCtrl', function ($scope, $routeParams, Event, Session, Attendee, Message, md5) {
     $scope.user = Session.user;
 
     $scope.event =
@@ -17,8 +16,17 @@ angular.module('iwasthereApp')
         });
         attendee.$save(function(attendee) {
             $scope.attendees.push(attendee);
+            $scope.event.iwasthere = true;
         });
     }
 
     $scope.attendees = Attendee.query({eventKey: $routeParams.key});
+
+    $scope.sendMessage = function(message) {
+        var m = new Message(message);
+        m.$save({eventKey: $routeParams.key, attendeeKey: md5.createHash($scope.user.email)}, function() {
+            // reload attendees
+            $scope.attendees = Attendee.query({eventKey: $routeParams.key});
+        });
+    }
   });

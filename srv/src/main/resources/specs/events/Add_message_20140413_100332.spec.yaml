@@ -1,0 +1,24 @@
+title: Add message 20140413 100332
+given:
+  - time: 2014-04-13T10:03:32.920+02:00
+  - collection: users
+    data: |
+        { "email" : "xavier.hanin@gmail.com" , "fullName" : "Xavier" , "roles" : [ "user"] , "_id" : { "$oid" : "53493772300413f15eb977ab"}}
+        { "email" : "xavier.hanin@4sh.fr" , "fullName" : "Xavier H" , "roles" : [ "user"] , "_id" : { "$oid" : "534938e4300413f15eb977ac"}}
+        { "email" : "test44" , "fullName" : "test 44" , "roles" : [ "user"] , "_id" : { "$oid" : "53496bca300413f15eb977ae"}}
+  - collection: attendees
+    data: |
+        { "_id" : { "$oid" : "53498ad40e47c0b93548512f"} , "fullName" : "test 44" , "emailHash" : "fd196d87b9d4752fa86a3ddf1481412a" , "img" : "http://www.gravatar.com/avatar/fd196d87b9d4752fa86a3ddf1481412a?s=350" , "eventRef" : "53492847300423f1ed818491"}
+        { "_id" : { "$oid" : "534a44cc0e47c0b935485131"} , "fullName" : "test 44" , "emailHash" : "fd196d87b9d4752fa86a3ddf1481412a" , "img" : "http://www.gravatar.com/avatar/fd196d87b9d4752fa86a3ddf1481412a?s=350" , "eventRef" : "53492847300423f1ed818491" , "messages" : [ { "timestamp" : { "$date" : "2014-04-13T08:03:24.948Z"} , "text" : "test" , "mood" : "blue"}]}
+wts:
+  - when: |
+       POST events/53492847300423f1ed818491/attendees/fd196d87b9d4752fa86a3ddf1481412a/messages
+       Cookie: RestxSession-iwasthere={"_expires":"2014-05-13T10:03:32.920+02:00","principal":"admin@iwasthere.io","sessionKey":"e97892ba-589e-4c8a-b909-5e9b05de60ff"}; RestxSessionSignature-iwasthere=c9FfBGvgWn3jiITOccPbPWnvvgY=
+
+        {"text":"test", "mood":"blue"}
+    then: |
+        {
+          "timestamp" : "2014-04-13T10:03:32.920+02:00",
+          "text" : "test",
+          "mood" : "blue"
+        }

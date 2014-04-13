@@ -9,4 +9,7 @@ angular.module('iwasthereApp')
     .factory('Attendee', function ($resource) {
         return $resource('/api/events/:eventKey/attendees', {eventKey: '@eventRef'});
     })
+    .factory('Message', function ($resource) {
+        return $resource('/api/events/:eventKey/attendees/:attendeeKey/messages');
+    })
 ;

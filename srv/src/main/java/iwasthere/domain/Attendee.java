@@ -1,14 +1,29 @@
 package iwasthere.domain;
 
+import org.jongo.marshall.jackson.oid.Id;
+import org.jongo.marshall.jackson.oid.ObjectId;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Date: 12/4/14
  * Time: 18:42
  */
 public class Attendee {
+    @Id @ObjectId
+    private String key;
+
     private String fullName;
     private String emailHash;
     private String img;
     private String eventRef;
+
+    private List<Message> messages = new ArrayList<>();
+
+    public String getKey() {
+        return key;
+    }
 
     public String getFullName() {
         return fullName;
@@ -24,6 +39,15 @@ public class Attendee {
 
     public String getImg() {
         return img;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public Attendee setKey(final String key) {
+        this.key = key;
+        return this;
     }
 
     public Attendee setFullName(final String fullName) {
@@ -47,13 +71,20 @@ public class Attendee {
         return this;
     }
 
+    public Attendee setMessages(final List<Message> messages) {
+        this.messages = messages;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Attendee{" +
-                "fullName='" + fullName + '\'' +
+                "key='" + key + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", emailHash='" + emailHash + '\'' +
                 ", img='" + img + '\'' +
                 ", eventRef='" + eventRef + '\'' +
+                ", messages=" + messages +
                 '}';
     }
 }

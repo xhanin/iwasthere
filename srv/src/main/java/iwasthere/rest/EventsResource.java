@@ -6,7 +6,9 @@ import com.google.common.hash.Hashing;
 import iwasthere.AppModule.Roles;
 import iwasthere.domain.Attendee;
 import iwasthere.domain.Event;
+import iwasthere.domain.Message;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import restx.WebException;
 import restx.annotations.GET;
 import restx.annotations.POST;
@@ -63,16 +65,37 @@ public class EventsResource {
 
     @POST("/events/:eventKey/attendees")
     public Attendee addAttendee(String eventKey, Attendee attendee) {
-        if (!Hashing.md5().hashString(RestxSession.current().getPrincipal().get().getName(), Charsets.UTF_8).toString()
-                .equals(attendee.getEmailHash())
-                && !RestxSession.current().getPrincipal().get().getPrincipalRoles().contains(Roles.ADMIN)) {
-            // non admin users can't add attendee other than self
-            throw new WebException(HttpStatus.FORBIDDEN);
-        }
+        checkSelfOrAdmin(attendee.getEmailHash());
 
         attendee.setEventRef(eventKey);
 
         attendees.get().save(attendee);
         return attendee;
+    }
+
+    @POST("/events/:eventKey/attendees/:attendeeEmailHash/messages")
+    public Message addMessage(String eventKey, String attendeeEmailHash,  Message message) {
+        checkSelfOrAdmin(attendeeEmailHash);
+
+        Attendee attendee = attendees.get()
+                .findOne("{eventRef: #, emailHash: # }", eventKey, attendeeEmailHash).as(Attendee.class);
+
+        if (attendee == null) {
+            throw new WebException(HttpStatus.NOT_FOUND);
+        }
+
+        attendee.getMessages().add(message.setTimestamp(DateTime.now()));
+        attendees.get().save(attendee);
+
+        return message;
+    }
+
+    private void checkSelfOrAdmin(String attendeeEmailHash) {
+        if (!Hashing.md5().hashString(RestxSession.current().getPrincipal().get().getName(), Charsets.UTF_8).toString()
+                .equals(attendeeEmailHash)
+                && !RestxSession.current().getPrincipal().get().getPrincipalRoles().contains(Roles.ADMIN)) {
+            // non admin users can't add messages to attendee other than self
+            throw new WebException(HttpStatus.FORBIDDEN);
+        }
     }
 }
