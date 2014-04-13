@@ -2,8 +2,13 @@ package iwasthere;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
+import restx.RestxContext;
 import restx.RestxFilter;
+import restx.RestxHandler;
 import restx.RestxHandlerMatch;
+import restx.RestxRequest;
+import restx.RestxRequestMatch;
+import restx.RestxResponse;
 import restx.StdRestxRequestMatch;
 import restx.config.ConfigLoader;
 import restx.config.ConfigSupplier;
@@ -19,6 +24,7 @@ import restx.security.StdBasicPrincipalAuthenticator;
 import restx.security.StdUserService;
 
 import javax.inject.Named;
+import java.io.IOException;
 
 @Module
 public class AppModule {
@@ -57,27 +63,33 @@ public class AppModule {
 
     @Provides
     public RestxFilter getCorsAuthorizerFilter() {
-        return (r) ->
-            RestxHandlerMatch.of(Optional.of(new StdRestxRequestMatch(r.getRestxPath())),
-                    (match, req, resp, ctx) -> {
-                        Optional<String> origin = req.getHeader("Origin");
-                        if (origin.isPresent()) {
-                            resp.setHeader("Access-Control-Allow-Origin", origin.get());
-                            resp.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                            resp.setHeader("Access-Control-Allow-Credentials", Boolean.TRUE.toString());
-                            resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        return new RestxFilter() {
+            @Override
+            public Optional<RestxHandlerMatch> match(RestxRequest r) {
+                return RestxHandlerMatch.of(Optional.of(new StdRestxRequestMatch(r.getRestxPath())),
+                        new RestxHandler() {
+                            @Override
+                            public void handle(RestxRequestMatch match, RestxRequest req, RestxResponse resp, RestxContext ctx) throws IOException {
+                                Optional<String> origin = req.getHeader("Origin");
+                                if (origin.isPresent()) {
+                                    resp.setHeader("Access-Control-Allow-Origin", origin.get());
+                                    resp.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                    resp.setHeader("Access-Control-Allow-Credentials", Boolean.TRUE.toString());
+                                    resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 
-                            if ("OPTIONS".equals(req.getHttpMethod())) {
-                                resp.setStatus(HttpStatus.OK);
-                            } else {
-                                ctx.nextHandlerMatch().handle(req, resp, ctx);
+                                    if ("OPTIONS".equals(req.getHttpMethod())) {
+                                        resp.setStatus(HttpStatus.OK);
+                                    } else {
+                                        ctx.nextHandlerMatch().handle(req, resp, ctx);
+                                    }
+                                } else {
+                                    ctx.nextHandlerMatch().handle(req, resp, ctx);
+                                }
                             }
-                        } else {
-                            ctx.nextHandlerMatch().handle(req, resp, ctx);
                         }
-                    }
-            )
-        ;
+                );
+            }
+        };
     }
 
     @Provides

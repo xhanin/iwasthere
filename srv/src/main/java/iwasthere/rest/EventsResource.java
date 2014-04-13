@@ -1,7 +1,9 @@
 package iwasthere.rest;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
 import com.google.common.hash.Hashing;
 import iwasthere.AppModule.Roles;
 import iwasthere.domain.Attendee;
@@ -21,9 +23,9 @@ import restx.security.RestxPrincipal;
 import restx.security.RestxSession;
 
 import javax.inject.Named;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import static com.google.common.collect.Iterables.transform;
 
 /**
  * Date: 12/4/14
@@ -32,7 +34,6 @@ import static com.google.common.collect.Iterables.transform;
 @Component
 @RestxResource
 public class EventsResource {
-
     private final JongoCollection events;
     private final JongoCollection attendees;
 
@@ -45,7 +46,12 @@ public class EventsResource {
     @PermitAll
     @GET("/events")
     public Iterable<Event> findEvents() {
-        return transform(events.get().find().as(Event.class), this::loadEventTransientFields);
+        return Iterables.transform(this.events.get().find().as(Event.class), new Function<Event, Event>() {
+            @Override
+            public Event apply(Event input) {
+                return loadEventTransientFields(input);
+            }
+        });
     }
 
     @PermitAll
