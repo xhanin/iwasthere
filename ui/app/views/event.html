@@ -36,25 +36,33 @@
                     </div>
                     <button ng-click="sendMessage(message)" type="button" class="btn btn-primary btn-block">Send message</button>
                     <button ng-click="showMessage = false"
-                            type="button" class="btn btn-primary btn-block">Dismiss message</button>
+                            type="button" class="btn btn-default btn-block">Close</button>
                 </form>
             </div>
 
             <div class="col-sm-6">
-                <form>
-                <div class="form-search search-only">
-                    <i class="search-icon glyphicon glyphicon-search"></i>
-                    <input type="text" class="form-control search-query" ng-model="query" autofocus placeholder="Filter">
+                <div class="container">
+                    <form role="form">
+                        <h4>Options</h4>
+                        <div class="checkbox">
+                            <input type="checkbox" ng-model="showImage"> Show attendees picture
+                        </div>
+                        <div class="form-group">
+                            <div class="form-search search-only">
+                                <i class="search-icon glyphicon glyphicon-search"></i>
+                                <input type="text" class="form-control search-query" ng-model="query" autofocus placeholder="Filter">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
 
 <h3>Attendees <span class="badge">{{ attendees.length }}</span></h3>
 <div class="row">
-    <div class="col-sm-6 col-md-3" ng-repeat="attendee in attendees  | filter:query">
+    <div class="col-xs-6 col-sd-4 col-md-3 col-lg-2" ng-repeat="attendee in attendees  | filter:query">
         <div class="thumbnail">
-            <img class="img-rounded" ng-src="{{attendee.img}}">
+            <img class="img-rounded" ng-src="{{attendee.img}}" ng-show="showImage">
             <div class="caption text-center">
                 <h3>{{attendee.fullName}}</h3>
                 <p ng-repeat="message in attendee.messages" class="mood mood-{{message.mood}}">{{message.text}}</p>

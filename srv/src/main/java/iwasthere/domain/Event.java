@@ -1,8 +1,10 @@
 package iwasthere.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.joda.time.DateTime;
 import org.jongo.marshall.jackson.oid.Id;
 import org.jongo.marshall.jackson.oid.ObjectId;
+import restx.jackson.Views.Transient;
 
 /**
  * Date: 12/4/14
@@ -15,6 +17,12 @@ public class Event {
     private String name;
     private DateTime date;
 
+    @JsonView(Transient.class)
+    private boolean iwasthere;
+
+    @JsonView(Transient.class)
+    private long count;
+
     public String getKey() {
         return key;
     }
@@ -25,6 +33,14 @@ public class Event {
 
     public DateTime getDate() {
         return date;
+    }
+
+    public boolean isIwasthere() {
+        return iwasthere;
+    }
+
+    public long getCount() {
+        return count;
     }
 
     public Event setKey(final String key) {
@@ -42,13 +58,24 @@ public class Event {
         return this;
     }
 
+    public Event setIwasthere(final boolean iwasthere) {
+        this.iwasthere = iwasthere;
+        return this;
+    }
+
+    public Event setCount(final long count) {
+        this.count = count;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 "key='" + key + '\'' +
                 ", name='" + name + '\'' +
                 ", date=" + date +
+                ", iwasthere=" + iwasthere +
+                ", count=" + count +
                 '}';
     }
-
 }

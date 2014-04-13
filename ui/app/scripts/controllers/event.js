@@ -4,6 +4,14 @@ angular.module('iwasthereApp')
   .controller('EventCtrl', function ($scope, $routeParams, Event, Session, Attendee, Message, md5) {
     $scope.user = Session.user;
 
+    $scope.showImage = true;
+
+    function loadDefaultMessage() {
+        $scope.message = { text: '', mood: 'blue' };
+    }
+
+    loadDefaultMessage();
+
     $scope.event =
         Event.get( { key: $routeParams.key } );
 
@@ -27,6 +35,7 @@ angular.module('iwasthereApp')
         m.$save({eventKey: $routeParams.key, attendeeKey: md5.createHash($scope.user.email)}, function() {
             // reload attendees
             $scope.attendees = Attendee.query({eventKey: $routeParams.key});
+            loadDefaultMessage();
         });
     }
   });

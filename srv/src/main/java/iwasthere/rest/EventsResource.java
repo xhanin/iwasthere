@@ -17,9 +17,13 @@ import restx.factory.Component;
 import restx.http.HttpStatus;
 import restx.jongo.JongoCollection;
 import restx.security.PermitAll;
+import restx.security.RestxPrincipal;
 import restx.security.RestxSession;
 
 import javax.inject.Named;
+import java.util.stream.Stream;
+
+import static com.google.common.collect.Iterables.transform;
 
 /**
  * Date: 12/4/14
@@ -41,13 +45,32 @@ public class EventsResource {
     @PermitAll
     @GET("/events")
     public Iterable<Event> findEvents() {
-        return events.get().find().as(Event.class);
+        return transform(events.get().find().as(Event.class), this::loadEventTransientFields);
     }
 
     @PermitAll
     @GET("/events/:key")
     public Optional<Event> findEvent(String key) {
-        return Optional.fromNullable(events.get().findOne(new ObjectId(key)).as(Event.class));
+        Event event = events.get().findOne(new ObjectId(key)).as(Event.class);
+        if (event == null) {
+            return Optional.absent();
+        }
+        return Optional.of(loadEventTransientFields(event));
+    }
+
+    private Event loadEventTransientFields(Event event) {
+        return event
+                .setCount(attendees.get().count("{eventRef: #}", event.getKey()))
+                .setIwasthere(wasSelfThere(event.getKey()))
+        ;
+    }
+
+    private boolean wasSelfThere(String eventKey) {
+        Optional<? extends RestxPrincipal> principal = RestxSession.current().getPrincipal();
+        if (!principal.isPresent()) {
+            return false;
+        }
+        return attendees.get().count("{eventRef: #, emailHash: #}", eventKey, selfEmailHash()) > 0;
     }
 
     @PermitAll
@@ -91,11 +114,15 @@ public class EventsResource {
     }
 
     private void checkSelfOrAdmin(String attendeeEmailHash) {
-        if (!Hashing.md5().hashString(RestxSession.current().getPrincipal().get().getName(), Charsets.UTF_8).toString()
+        if (!selfEmailHash()
                 .equals(attendeeEmailHash)
                 && !RestxSession.current().getPrincipal().get().getPrincipalRoles().contains(Roles.ADMIN)) {
             // non admin users can't add messages to attendee other than self
             throw new WebException(HttpStatus.FORBIDDEN);
         }
+    }
+
+    private String selfEmailHash() {
+        return Hashing.md5().hashString(RestxSession.current().getPrincipal().get().getName(), Charsets.UTF_8).toString();
     }
 }
