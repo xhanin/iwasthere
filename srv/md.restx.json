@@ -4,7 +4,7 @@
 
     "properties": {
         "java.version": "1.7",
-        "restx.version": "0.32",
+        "restx.version": "0.33-SNAPSHOT",
         "project.war.resources.directory": "../ui/dist"
     },
     "fragments": {
