@@ -43,6 +43,11 @@ public class EventsResource {
         this.attendees = attendees;
     }
 
+    /**
+     * Find all events covered by iwasthere.
+     *
+     * @return the list of events
+     */
     @PermitAll
     @GET("/events")
     public Iterable<Event> findEvents() {
@@ -54,6 +59,11 @@ public class EventsResource {
         });
     }
 
+    /**
+     * Find a particular event by key
+     * @param key event key
+     * @return the event
+     */
     @PermitAll
     @GET("/events/:key")
     public Optional<Event> findEvent(String key) {
@@ -79,6 +89,12 @@ public class EventsResource {
         return attendees.get().count("{eventRef: #, emailHash: #}", eventKey, selfEmailHash()) > 0;
     }
 
+    /**
+     * Creates a new event covered by iwasthere.
+     *
+     * @param event the event to add.
+     * @return the created event.
+     */
     @PermitAll
     @POST("/events")
     public Event addEvent(Event event) {
@@ -86,6 +102,12 @@ public class EventsResource {
         return event;
     }
 
+    /**
+     * Returns all the attendees of an event.
+     *
+     * @param eventKey the key of the event for which attendees should be returned.
+     * @return the event attendees.
+     */
     @PermitAll
     @GET("/events/:eventKey/attendees")
     public Iterable<Attendee> getEventAttendees(String eventKey) {
