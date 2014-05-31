@@ -4,12 +4,13 @@
 
     "properties": {
         "java.version": "1.7",
-        "restx.version": "0.33-SNAPSHOT",
+        "restx.version": "0.33.1",
         "project.war.resources.directory": "../ui/dist"
     },
     "fragments": {
         "maven": [
-            "classpath:///restx/build/fragments/maven/copy-dependencies.xml"
+            "classpath:///restx/build/fragments/maven/copy-dependencies.xml",
+            "classpath:///restx/build/fragments/maven/javadoc-apidoclet.xml"
         ]
     },
     "dependencies": {
