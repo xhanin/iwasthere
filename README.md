@@ -3,6 +3,38 @@ iwasthere
 
 RESTX demo app
 
+## Running
+
+### Server
+
+Server side is located in `srv` directory, and is a standard restx app.
+
+You can run it with `restx` shell:
+
+`restx deps install + app run`
+
+You can also run it with a simple java command after building it:
+
+```
+mvn package
+mvn dependency:copy-dependencies
+java  -cp "target/classes:target/dependency/*" iwasthere.AppServer
+```
+
+The default admin user / password is `admin@iwasthere.io` / `juma`
+
+### UI
+
+You can run the UI with:
+```
+npm install
+bower install
+grunt serve
+```
+
+Or simply `grunt serve` if your bower dependencies are already up to date.
+
+
 ## Structure
 
 ### Server
@@ -33,34 +65,6 @@ grunt build
 
 You can use maven to build the whole app as a war with `mvn install` at the root level (this directory).
 
-## Running
-
-### Server
-
-Server side is located in `srv` directory, and is a standard restx app.
-
-You can run it with `restx` shell:
-
-`restx deps install + app run`
-
-You can also run it with a simple java command after building it:
-
-```
-mvn package
-mvn dependency:copy-dependencies
-java  -cp "target/classes:target/dependency/*" iwasthere.AppServer
-```
-
-### UI
-
-You can run the UI with:
-```
-npm install
-bower install
-grunt serve
-```
-
-Or simply `grunt serve` if your bower dependencies are already up to date.
 
 
 Running the UI launches a web server to serve the static assets on port `9000`, configured with a reverse proxy for the REST API calls targetted at a local server, so you need to run the `server` side too.
